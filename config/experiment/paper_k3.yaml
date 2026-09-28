@@ -1,0 +1,14 @@
+# @package _global_
+name: mechanical_k3
+model:
+  num_sources: 3
+  sde:
+    feature_dim: 3
+    drift_decay_rate: 3.0
+    zero_mode_decay_rate: 3.0
+    sigma_min: 0.1
+    sigma_max: 5.0
+path:
+  datasets:
+    mixdata: data/mechanical_k3_npz
+    filters_path: data/mechanical_k3_npz/filters.npz

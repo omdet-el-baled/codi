@@ -1,0 +1,16 @@
+_target_: pytorch_lightning.Trainer
+accumulate_grad_batches: 1
+min_epochs: 1
+max_epochs: 1000
+deterministic: true
+accelerator: auto
+devices: 1
+precision: 32-true
+gradient_clip_val: 2.0
+gradient_clip_algorithm: norm
+check_val_every_n_epoch: 5
+limit_val_batches: 1.0
+default_root_dir: .
+profiler: null
+log_every_n_steps: 10
+enable_checkpointing: true

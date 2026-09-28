@@ -1,0 +1,12 @@
+# @package _global_
+name: ablation_legacy_network
+model:
+  score_model:
+    backbone_args:
+      _target_: src.models.ncsn.UNet
+      K: ${model.num_sources}
+      base_channels: 64
+      channel_mults: [1, 2, 4, 8, 4]
+      t_features: 256
+      T: 1.0
+      y_channels: 1

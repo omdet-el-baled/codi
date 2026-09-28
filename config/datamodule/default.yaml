@@ -1,0 +1,46 @@
+train:
+  dl_opts:
+    num_workers: 4
+    shuffle: true
+    batch_size: 16
+    drop_last: true
+  dataset:
+    _target_: src.dataset.dataloaders.MixData
+    path: ${path.datasets.mixdata}
+    num_sources: ${model.num_sources}
+    sampling_rate: ${model.sampling_rate}
+    split: train
+    max_length_seconds: null
+    max_num_samples: null
+    storage: auto
+    use_cached_fft: true
+val:
+  dl_opts:
+    num_workers: 4
+    shuffle: false
+    batch_size: 16
+  dataset:
+    _target_: src.dataset.dataloaders.MixData
+    path: ${path.datasets.mixdata}
+    num_sources: ${model.num_sources}
+    sampling_rate: ${model.sampling_rate}
+    split: val
+    max_length_seconds: null
+    max_num_samples: null
+    storage: auto
+    use_cached_fft: true
+test:
+  dl_opts:
+    num_workers: 4
+    shuffle: false
+    batch_size: 8
+  dataset:
+    _target_: src.dataset.dataloaders.MixData
+    path: ${path.datasets.mixdata}
+    num_sources: ${model.num_sources}
+    sampling_rate: ${model.sampling_rate}
+    split: test
+    max_length_seconds: null
+    max_num_samples: null
+    storage: auto
+    use_cached_fft: true

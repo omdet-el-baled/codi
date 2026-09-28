@@ -1,0 +1,6 @@
+# @package _global_
+name: ablation_no_drift_no_mismatch
+model:
+  prior_sampling_prob: 0.0
+  sde:
+    drift_mode: none

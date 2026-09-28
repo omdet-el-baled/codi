@@ -1,0 +1,91 @@
+defaults:
+  - _self_
+
+num_sources: 2
+sampling_rate: 2000
+time_epsilon: 0.005
+reverse_init_time: 0.03
+normalization_type: ortho
+
+# Mismatch-aware terminal training. Set to 0 for the ablation.
+prior_sampling_prob: 0.05
+# DSM time distribution. Options: uniform, log_uniform, mixed, varprop.
+time_sampling_strategy: uniform
+
+# Neural output parameterization.
+# physical: network predicts the physical score s_theta directly.
+# whitened: network predicts u_theta = S_t^H s_theta; reverse-time code
+# analytically converts u_theta back to the physical score.
+score_parameterization: physical
+
+# Used only by time_sampling_strategy=mixed. 0.5 means half of ordinary
+# DSM samples are log-uniform in t and half are uniform.
+time_sampling_log_fraction: 0.5
+train_source_order: power
+
+# EMA is updated once per optimizer step, including under grad accumulation.
+ema_decay: 0.999
+ema_warmup_power: 0.75
+ema_inv_gamma: 1.0
+
+# Diagnostics that cause host/device synchronization are off by default.
+debug_loss_spikes: false
+spike_window: 50
+spike_multiplier: 2.0
+
+score_model:
+  _target_: src.score_model.ScoreModel
+  num_sources: ${model.num_sources}
+  transform: none
+  enforce_real_rfft_bins: true
+  backbone_args:
+    _target_: src.models.enhanced_unet.PhysicsConditionedUNet
+    K: ${model.num_sources}
+    base_channels: 64
+    channel_mults: [1, 2, 3, 4]
+    blocks_per_level: 2
+    time_dim: 256
+    dropout: 0.05
+    attention_heads: 4
+    attention_levels: [2, 3]
+    T: 1.0
+
+sde:
+  _target_: src.sde.freqsde.VEConvMixSDE
+  feature_dim: ${model.num_sources}
+  drift_decay_rate: 4.0
+  zero_mode_decay_rate: 3.0
+  sigma_min: 0.2
+  sigma_max: 5.0
+  steps: 2000
+  terminal_time: 1.0
+  num_reverse_steps: 50
+  drift_mode: mixing
+  store_full_matrix: false
+
+# Reverse integration always stops exactly at model.time_epsilon.
+# euler/heun/rk4 are probability-flow ODE solvers.
+# em is reverse-SDE Euler-Maruyama; pc adds Langevin correction.
+sampler:
+  method: euler
+  num_steps: 50
+  schedule: linear
+  signal_to_noise_ratio: 0.1
+  num_corrector_steps: 1
+
+loss:
+  _target_: torch.nn.MSELoss
+
+main_val_loss: val/loss_rec
+main_val_loss_mode: max
+
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 0.0001
+  weight_decay: 0.0001
+scheduler: null
+
+# Retained for backwards compatibility with the original LightningModule.
+grad_clipper:
+  _target_: utils.FixedClipper
+  max_norm: 2.0

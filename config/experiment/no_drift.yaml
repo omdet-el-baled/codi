@@ -1,0 +1,5 @@
+# @package _global_
+name: ablation_no_drift
+model:
+  sde:
+    drift_mode: none

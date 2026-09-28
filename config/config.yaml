@@ -1,0 +1,38 @@
+defaults:
+  - _self_
+  - datamodule: default
+  - model: default
+  - trainer: default
+  - experiment: null
+
+seed: 2
+name: default
+train: true
+test: false
+checkpoint: null
+evaluation_out: evaluation
+save_top_k: 3
+early_stopping_patience: null
+detect_anomaly: false
+
+# Optional:
+# load_pretrained: /path/to/model.ckpt
+# resume_from_checkpoint: /path/to/last.ckpt
+
+path:
+  exp_root: exp
+  datasets:
+    mixdata: data/sim_2src
+    filters_path: data/sim_2src/filters/filters.npy
+  figures: figures
+
+hydra:
+  run:
+    dir: ${path.exp_root}/${name}/${now:%Y-%m-%d}_${now:%H-%M-%S}_${hydra.job.override_dirname}
+  job:
+    config:
+      override_dirname:
+        kv_sep: '-'
+        item_sep: '_'
+        exclude_keys:
+          - path.exp_root

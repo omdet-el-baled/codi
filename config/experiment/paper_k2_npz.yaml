@@ -1,0 +1,6 @@
+# @package _global_
+name: mechanical_k2
+path:
+  datasets:
+    mixdata: data/mechanical_k2_npz
+    filters_path: data/mechanical_k2_npz/filters.npz

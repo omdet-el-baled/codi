@@ -1,0 +1,6 @@
+# @package _global_
+name: music_k2
+path:
+  datasets:
+    mixdata: data/music_k2_npz
+    filters_path: data/music_k2_npz/filters.npz
