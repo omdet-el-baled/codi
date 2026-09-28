@@ -1,0 +1,13 @@
+# Install PyTorch + torchaudio separately using the CUDA build that already works on your machine.
+numpy>=1.26
+scipy>=1.11
+matplotlib>=3.8
+scikit-learn>=1.3
+hydra-core>=1.3
+omegaconf>=2.3
+pytorch-lightning>=2.2,<3
+torchmetrics>=1.3
+rich>=13
+tensorboard>=2.14
+soundfile>=0.12
+pytest>=8.0

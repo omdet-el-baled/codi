@@ -1,0 +1,21 @@
+name: fourier_diffusion
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - numpy
+  - scipy
+  - matplotlib
+  - scikit-learn
+  - pyyaml
+  - pip:
+      - hydra-core>=1.3
+      - omegaconf>=2.3
+      - pytorch-lightning>=2.2,<3
+      - torchmetrics>=1.3
+      - rich>=13
+      - tensorboard>=2.14
+      - soundfile>=0.12
+# PyTorch/torchaudio are intentionally omitted: install the CUDA build matching
+# your NVIDIA driver before installing the remaining Python dependencies.
